@@ -1,0 +1,22 @@
+service: profit-service
+
+provider:
+  name: aws
+  runtime: python3.6
+  stage: uat
+
+plugins:
+  - serverless-python-requirements
+
+functions:
+  profit:
+    handler: handler.profit
+    memorySize: 128
+    events:
+      - http:
+          path: profit
+          method: get
+
+package:
+  exclude:
+    - venv/**
