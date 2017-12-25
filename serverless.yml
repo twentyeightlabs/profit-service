@@ -16,6 +16,15 @@ functions:
       - http:
           path: profit
           method: get
+          cors: true
+
+  szalas:
+    handler: profit.szalas
+    memorySize: 128
+    events:
+      - http:
+          path: szalas
+          method: get
 
 package:
   exclude:
