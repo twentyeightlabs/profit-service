@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "serverless-python-requirements": "^3.0.10"
+    "serverless-python-requirements": "^3.0.10",
+    "serverless-sync-s3buckets": "^1.0.1"
   }
 }

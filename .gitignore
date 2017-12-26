@@ -1,7 +1,7 @@
 # Distribution / packaging
-__pycache__/
+.DS_Store
+.idea/
 .Python
-env/
 venv/
 build/
 develop-eggs/
@@ -17,7 +17,6 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
-.DS_Store
-.idea/
+
 # Serverless directories
 .serverless

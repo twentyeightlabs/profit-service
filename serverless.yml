@@ -3,29 +3,58 @@ service: profit-service
 provider:
   name: aws
   runtime: python3.6
-  stage: uat
+  stage: dev
 
 plugins:
   - serverless-python-requirements
+  - serverless-sync-s3buckets
 
 functions:
-  profit:
-    handler: handler.profit
-    memorySize: 128
+  checkethprice:
+    handler: functions/ethPrice.checkethprice
     events:
       - http:
-          path: profit
+          path: ethprice
+          method: get
+          cors: true
+  checkbtcprice:
+    handler: functions/btcPrice.checkbtcprice
+    events:
+      - http:
+          path: btcprice
           method: get
           cors: true
 
-  szalas:
-    handler: profit.szalas
-    memorySize: 128
-    events:
-      - http:
-          path: szalas
-          method: get
+custom:
+  syncS3Buckets:
+    - bucketName: profit-service-front # The front-end website
+      localDir: static
+
+resources:
+  Resources:
+    ProfitServiceFront:
+      Type: "AWS::S3::Bucket"
+      Properties:
+        BucketName: profit-service-front
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          ErrorDocument: index.html
+          IndexDocument: index.html
+    WebSiteS3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: ProfitServiceFront
+        PolicyDocument:
+          Statement:
+            - Sid: PublicReadGetObject
+              Effect: Allow
+              Principal: "*"
+              Action:
+              - s3:GetObject
+              Resource: {"Fn::Join": ["", ["arn:aws:s3:::", {Ref: ProfitServiceFront}, "/*"]]}
 
 package:
   exclude:
     - venv/**
+    - __pycache__/**
